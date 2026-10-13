@@ -280,15 +280,25 @@ ul, ol {
   height: 68px;
 }
 
-.brand-logo {
-  display: flex;
+.brand-logo-link {
+  display: inline-flex;
   align-items: center;
-  height: 40px;
+  text-decoration: none;
+  line-height: 0;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
 }
 
-.brand-logo img {
-  height: 38px;
+.brand-logo-link:hover {
+  opacity: 0.9;
+}
+
+.brand-logo {
+  height: 40px;
   width: auto;
+  max-width: 190px;
+  object-fit: contain;
+  display: block;
 }
 
 .nav-menu {
@@ -311,6 +321,16 @@ ul, ol {
   }
   .nav-link:hover, .nav-link.active {
     color: var(--color-primary);
+  }
+  .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: var(--space-0-5);
+    right: var(--space-0-5);
+    height: 2px;
+    background-color: var(--color-primary);
+    border-radius: var(--radius-full);
   }
 }
 
@@ -401,7 +421,8 @@ ul, ol {
   border-bottom: 1px solid var(--color-border-subtle);
 }
 
-.mobile-nav-link:hover {
+.mobile-nav-link:hover,
+.mobile-nav-link.active {
   color: var(--color-primary);
 }
 
@@ -485,10 +506,58 @@ ul, ol {
   color: var(--color-primary);
 }
 
-/* --- 6. CAROUSEL TRACK (SNAP-SCROLL MOBILE-FIRST) --- */
+/* --- 6. CAROUSEL TRACK (SNAP-SCROLL MOBILE-FIRST CON FLECHAS EN DESKTOP) --- */
 .carousel-wrapper {
   margin-top: var(--space-4);
   position: relative;
+}
+
+.carousel-arrow {
+  display: none;
+  position: absolute;
+  top: 45%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  min-height: 48px;
+  border-radius: var(--radius-full);
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--color-border-subtle);
+  color: var(--color-text-primary);
+  font-size: 1.25rem;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.carousel-arrow:hover {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #000000;
+  transform: translateY(-50%) scale(1.08);
+}
+
+.carousel-arrow:active {
+  transform: translateY(-50%) scale(0.96);
+}
+
+.carousel-arrow-prev {
+  left: -24px;
+}
+
+.carousel-arrow-next {
+  right: -24px;
+}
+
+@media (min-width: 900px) {
+  .carousel-arrow {
+    display: flex;
+  }
 }
 
 .carousel-track {
@@ -537,6 +606,10 @@ ul, ol {
   transform: scale(1.04);
 }
 
+[data-lightbox] {
+  cursor: zoom-in;
+}
+
 .carousel-caption {
   position: absolute;
   bottom: 0;
@@ -547,6 +620,7 @@ ul, ol {
   color: var(--color-text-primary);
   font-size: var(--font-size-small);
   font-weight: 500;
+  pointer-events: none;
 }
 
 .carousel-nav-hint {
@@ -1403,3 +1477,185 @@ ul, ol {
     box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
   }
 }
+
+/* --- 17. ESTILOS DE CRÉDITOS & MARCA WAFLERS --- */
+.waflers-link {
+  color: var(--color-primary);
+  font-weight: 700;
+  text-decoration: none;
+  transition: opacity 0.2s ease, text-shadow 0.2s ease;
+}
+
+.waflers-link:hover {
+  text-decoration: none;
+  opacity: 0.85;
+  text-shadow: 0 0 8px var(--color-primary-glow);
+}
+
+.footer-brand .brand-logo {
+  height: 40px;
+  width: auto;
+  max-width: 190px;
+  object-fit: contain;
+  margin-bottom: var(--space-2);
+}
+
+/* --- 18. MODAL / LIGHTBOX DE IMÁGENES EN PANTALLA COMPLETA --- */
+.lightbox-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.lightbox-modal.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.lightbox-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.lightbox-container {
+  position: relative;
+  max-width: 90vw;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2001;
+}
+
+.lightbox-media-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 100%;
+  max-height: 85vh;
+}
+
+.lightbox-img {
+  max-width: 100%;
+  max-height: 72vh;
+  object-fit: contain;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-subtle);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.95);
+  user-select: none;
+}
+
+.lightbox-caption {
+  margin-top: var(--space-2);
+  color: var(--color-text-secondary);
+  font-size: 0.938rem;
+  text-align: center;
+  max-width: 700px;
+  line-height: 1.4;
+}
+
+.lightbox-btn {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  min-height: 48px;
+  min-width: 48px;
+  background: rgba(35, 35, 35, 0.85);
+  border: 1px solid var(--color-border-subtle);
+  color: var(--color-text-primary);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 2002;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+}
+
+.lightbox-btn:hover {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #000000;
+  transform: scale(1.08);
+}
+
+.lightbox-btn:active {
+  transform: scale(0.96);
+}
+
+.lightbox-close {
+  top: -24px;
+  right: -24px;
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.lightbox-prev {
+  top: 50%;
+  left: -64px;
+  transform: translateY(-50%);
+}
+
+.lightbox-prev:hover {
+  transform: translateY(-50%) scale(1.08);
+}
+
+.lightbox-next {
+  top: 50%;
+  right: -64px;
+  transform: translateY(-50%);
+}
+
+.lightbox-next:hover {
+  transform: translateY(-50%) scale(1.08);
+}
+
+@media (max-width: 767px) {
+  .lightbox-container {
+    max-width: 96vw;
+  }
+  .lightbox-img {
+    max-height: 60vh;
+  }
+  .lightbox-close {
+    top: -44px;
+    right: 0;
+  }
+  .lightbox-prev {
+    left: 8px;
+    top: auto;
+    bottom: -60px;
+    transform: none;
+  }
+  .lightbox-prev:hover {
+    transform: scale(1.08);
+  }
+  .lightbox-next {
+    right: 8px;
+    top: auto;
+    bottom: -60px;
+    transform: none;
+  }
+  .lightbox-next:hover {
+    transform: scale(1.08);
+  }
+}
+

@@ -15,8 +15,8 @@
   <meta property="og:description" content="Protección premium con PPF 3M y cerámicos en Luján de Cuyo. Turnos por WhatsApp.">
   <meta property="og:url" content="https://blandinidetailing.com/">
   <meta property="og:site_name" content="Blandini Detailing">
-  <meta property="og:image" content="https://blandinidetailing.com/assets/brand/og-image.jpg">
-  <meta property="og:image:secure_url" content="https://blandinidetailing.com/assets/brand/og-image.jpg">
+  <meta property="og:image" content="/assets/brand/og-image.jpg">
+  <meta property="og:image:secure_url" content="/assets/brand/og-image.jpg">
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -26,12 +26,11 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Blandini Detailing | PPF y Cerámicos en Mendoza">
   <meta name="twitter:description" content="Protección premium con PPF 3M y cerámicos en Luján de Cuyo. Turnos por WhatsApp.">
-  <meta name="twitter:image" content="https://blandinidetailing.com/assets/brand/og-image.jpg">
+  <meta name="twitter:image" content="/assets/brand/og-image.jpg">
 
-  <!-- Favicons -->
-  <link rel="icon" type="image/x-icon" href="/assets/brand/favicon.ico">
+  <!-- Favicons (Ajustado exactamente a /assets/brand/favicon.png) -->
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/brand/favicon.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/assets/brand/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/brand/favicon.png">
   <meta name="theme-color" content="#000000">
 
   <!-- Google Fonts (Roboto Oficial) -->
@@ -65,7 +64,7 @@
         "alternateName": "Blandini Detailing Mendoza",
         "description": "Taller boutique de estética, protección de pintura con PPF certificado 3M, tratamientos cerámicos 9H y restauración de vehículos clásicos en Luján de Cuyo, Mendoza.",
         "url": "https://blandinidetailing.com/",
-        "logo": "https://blandinidetailing.com/assets/brand/logo-blandini-yellow.svg",
+        "logo": "https://blandinidetailing.com/assets/brand/logo.png",
         "image": "https://blandinidetailing.com/assets/brand/og-image.jpg",
         "telephone": "+5492613371061",
         "priceRange": "$$$",
@@ -137,7 +136,7 @@
       },
       {
         "@type": "FAQPage",
-        "@id": "https://blandinidetailing.com.ar/#faqpage",
+        "@id": "https://blandinidetailing.com/#faqpage",
         "mainEntity": [
           {
             "@type": "Question",
@@ -212,18 +211,19 @@
 <body>
 
   <!-- CABECERA PRINCIPAL & NAVBAR STICKY -->
-  <header class="site-header" id="inicio">
+  <header class="site-header">
     <div class="container navbar-container">
-      <a href="#inicio" class="brand-logo" aria-label="Blandini Detailing - Inicio">
-        <img src="/assets/brand/logo-blandini-yellow.svg" alt="Blandini Detailing — Taller de Estética Automotriz y PPF en Mendoza" width="160" height="38">
+      <!-- Logo Real envuelto en enlace que sube suavemente al inicio -->
+      <a href="#" class="brand-logo-link" aria-label="Blandini Detailing - Volver al Inicio" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">
+        <img src="/assets/brand/logo.png" alt="Blandini Detailing" class="brand-logo">
       </a>
 
-      <!-- Menú Desktop -->
+      <!-- Menú Desktop: Orden exacto según aparición en scroll -->
       <nav class="nav-menu" aria-label="Navegación principal">
         <a href="#inicio" class="nav-link active">Inicio</a>
+        <a href="#certificacion-3m" class="nav-link">Certificación 3M</a>
         <a href="#servicios" class="nav-link">Servicios</a>
         <a href="#casos" class="nav-link">Casos Reales</a>
-        <a href="#certificacion-3m" class="nav-link">Certificación 3M</a>
         <a href="#faq" class="nav-link">Preguntas Frecuentes</a>
         <a href="#contacto" class="nav-link">Ubicación</a>
       </nav>
@@ -240,15 +240,18 @@
       </button>
     </div>
 
-    <!-- Menú Desplegable Móvil -->
+    <!-- Menú Desplegable Móvil: Orden exacto según aparición en scroll -->
     <nav class="mobile-nav" id="mobileNav" aria-label="Menú móvil">
       <a href="#inicio" class="mobile-nav-link">Inicio</a>
+      <a href="#certificacion-3m" class="mobile-nav-link">Certificación Oficial 3M</a>
       <a href="#servicios" class="mobile-nav-link">Servicios Especializados</a>
       <a href="#casos" class="mobile-nav-link">Casos de Estudio Reales</a>
-      <a href="#certificacion-3m" class="mobile-nav-link">Certificación Oficial 3M</a>
       <a href="#faq" class="mobile-nav-link">Preguntas Frecuentes</a>
       <a href="#contacto" class="mobile-nav-link">Contacto y Taller</a>
       <a href="https://wa.me/5492613371061?text=Hola%20Blandini%20Detailing,%20quiero%20coordinar%20un%20turno%20para%20evaluar%20mi%20vehículo." class="btn-primary" style="margin-top: 16px;" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+          <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.699c.969.54 1.772.88 2.791.88 3.182 0 5.768-2.587 5.768-5.766.001-3.187-2.575-5.766-5.768-5.766zm9.969 5.766c0 5.505-4.475 9.98-9.975 9.98-1.745 0-3.376-.452-4.801-1.242l-5.224 1.368 1.393-5.088c-.902-1.488-1.428-3.235-1.428-5.018 0-5.506 4.475-9.98 9.975-9.98s9.975 4.474 9.975 9.98zm-6.257 2.378c-.147-.247-.542-.395-.888-.568-.346-.173-2.049-1.012-2.37-1.129-.321-.118-.555-.173-.79.173-.235.346-.913 1.129-1.12 1.364-.207.235-.415.26-.761.086-.346-.173-1.46-.538-2.78-1.716-1.028-.918-1.722-2.052-1.924-2.398-.203-.346-.022-.533.152-.705.156-.155.346-.407.519-.611.173-.204.231-.346.346-.574.116-.228.058-.426-.029-.599-.086-.173-.79-1.902-1.082-2.605-.285-.685-.573-.591-.79-.602-.204-.01-.439-.012-.673-.012-.235 0-.617.088-.94.439-.323.351-1.235 1.208-1.235 2.946s1.265 3.42 1.442 3.655c.177.235 2.49 3.803 6.033 5.332.843.364 1.501.582 2.014.745.847.269 1.618.231 2.227.14.679-.101 2.049-.838 2.336-1.648.287-.81.287-1.505.201-1.649z"/>
+        </svg>
         Coordinar Turno por WhatsApp
       </a>
     </nav>
@@ -256,7 +259,7 @@
 
   <main>
     <!-- SECCIÓN 1: HERO SECTION & PROMETEO -->
-    <section class="hero-section">
+    <section class="hero-section" id="inicio">
       <div class="container">
         <div class="hero-content">
           <div class="hero-pill">
@@ -273,8 +276,11 @@
           </p>
 
           <div class="hero-actions">
+            <!-- Botón CTA con Ícono Oficial de WhatsApp (relleno sólido) -->
             <a href="https://wa.me/5492613371061?text=Hola%20Blandini%20Detailing,%20quiero%20solicitar%20un%20presupuesto%20para%20mi%20auto." class="btn-primary" target="_blank" rel="noopener noreferrer">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true">
+                <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.699c.969.54 1.772.88 2.791.88 3.182 0 5.768-2.587 5.768-5.766.001-3.187-2.575-5.766-5.768-5.766zm9.969 5.766c0 5.505-4.475 9.98-9.975 9.98-1.745 0-3.376-.452-4.801-1.242l-5.224 1.368 1.393-5.088c-.902-1.488-1.428-3.235-1.428-5.018 0-5.506 4.475-9.98 9.975-9.98s9.975 4.474 9.975 9.98zm-6.257 2.378c-.147-.247-.542-.395-.888-.568-.346-.173-2.049-1.012-2.37-1.129-.321-.118-.555-.173-.79.173-.235.346-.913 1.129-1.12 1.364-.207.235-.415.26-.761.086-.346-.173-1.46-.538-2.78-1.716-1.028-.918-1.722-2.052-1.924-2.398-.203-.346-.022-.533.152-.705.156-.155.346-.407.519-.611.173-.204.231-.346.346-.574.116-.228.058-.426-.029-.599-.086-.173-.79-1.902-1.082-2.605-.285-.685-.573-.591-.79-.602-.204-.01-.439-.012-.673-.012-.235 0-.617.088-.94.439-.323.351-1.235 1.208-1.235 2.946s1.265 3.42 1.442 3.655c.177.235 2.49 3.803 6.033 5.332.843.364 1.501.582 2.014.745.847.269 1.618.231 2.227.14.679-.101 2.049-.838 2.336-1.648.287-.81.287-1.505.201-1.649z"/>
+              </svg>
               Consultar Presupuesto por WhatsApp
             </a>
             <a href="#casos" class="btn-secondary">
@@ -291,35 +297,40 @@
           </div>
         </div>
 
-        <!-- CARRUSEL TÁCTIL MOBILE-FIRST -->
+        <!-- CARRUSEL TÁCTIL CON FLECHAS EN DESKTOP Y LIGHTBOX -->
         <div class="carousel-wrapper">
-          <div class="carousel-track" aria-label="Galería visual de trabajos en taller">
+          <button class="carousel-arrow carousel-arrow-prev" id="carouselPrevBtn" aria-label="Desplazar fotos a la izquierda">&#10094;</button>
+
+          <div class="carousel-track" id="carouselTrack" aria-label="Galería visual de trabajos en taller">
             <div class="carousel-item">
-              <img src="/assets/carousel/carousel-01.webp" alt="Detallado de vehículo en cabina técnica de Blandini Detailing" width="400" height="300">
+              <img src="/assets/carousel/carousel-01.webp" alt="Detallado de vehículo en cabina técnica de Blandini Detailing" width="400" height="300" data-lightbox>
               <div class="carousel-caption">Cabina técnica climatizada</div>
             </div>
             <div class="carousel-item">
-              <img src="/assets/carousel/carousel-02.webp" alt="Corrección de barniz y pulido técnico en carrocería" width="400" height="300">
+              <img src="/assets/carousel/carousel-02.webp" alt="Corrección de barniz y pulido técnico en carrocería" width="400" height="300" data-lightbox>
               <div class="carousel-caption">Corrección de barniz sin hologramas</div>
             </div>
             <div class="carousel-item">
-              <img src="/assets/carousel/carousel-03.webp" alt="Terminación de brillo cristalino y sellado cerámico" width="400" height="300">
+              <img src="/assets/carousel/carousel-03.webp" alt="Terminación de brillo cristalino y sellado cerámico" width="400" height="300" data-lightbox>
               <div class="carousel-caption">Acabado con sellado cerámico 9H</div>
             </div>
             <div class="carousel-item">
-              <img src="/assets/carousel/carousel-04.webp" alt="Inspección minuciosa de panel con luz técnica" width="400" height="300">
+              <img src="/assets/carousel/carousel-04.webp" alt="Inspección minuciosa de panel con luz técnica" width="400" height="300" data-lightbox>
               <div class="carousel-caption">Inspección de pintura multipunto</div>
             </div>
             <div class="carousel-item">
-              <img src="/assets/carousel/carousel-05.webp" alt="Líneas de chapa perfectas y libre de micro-rayas" width="400" height="300">
+              <img src="/assets/carousel/carousel-05.webp" alt="Líneas de chapa perfectas y libre de micro-rayas" width="400" height="300" data-lightbox>
               <div class="carousel-caption">Brillo y profundidad de color</div>
             </div>
             <div class="carousel-item">
-              <img src="/assets/carousel/carousel-06.webp" alt="Vehículo terminado listo para entrega al cliente" width="400" height="300">
+              <img src="/assets/carousel/carousel-06.webp" alt="Vehículo terminado listo para entrega al cliente" width="400" height="300" data-lightbox>
               <div class="carousel-caption">Entrega garantizada con turno previo</div>
             </div>
           </div>
-          <p class="carousel-nav-hint">Deslizá para ver más fotos de nuestros trabajos en taller ➔</p>
+
+          <button class="carousel-arrow carousel-arrow-next" id="carouselNextBtn" aria-label="Desplazar fotos a la derecha">&#10095;</button>
+
+          <p class="carousel-nav-hint">Hacé clic en cualquier foto para verla en pantalla completa 🔍</p>
         </div>
       </div>
     </section>
@@ -358,7 +369,7 @@
         <!-- MÓDULO DESTACADO CERTIFICACIÓN 3M -->
         <div class="authority-card">
           <div class="authority-image-box">
-            <img src="/assets/certifications/certificacion-3m-scotchgard.webp" alt="Certificación Oficial 3M Scotchgard Serie Pro 200 entregada a Renzo Blandini y Gino Lanzillotta" width="500" height="375" loading="lazy">
+            <img src="/assets/certifications/certificacion-3m-scotchgard.webp" alt="Certificación Oficial 3M Scotchgard Serie Pro 200 entregada a Renzo Blandini y Gino Lanzillotta" width="500" height="375" loading="lazy" data-lightbox>
           </div>
           <div class="authority-info-box">
             <div class="pill-badge" style="margin-bottom: 12px;">AVAL OFICIAL DE FÁBRICA</div>
@@ -547,17 +558,17 @@
           <div class="case-study-layout">
             <div class="case-gallery">
               <div class="case-main-img">
-                <img src="/assets/cases/0km/bmw-x6m-frontal-ppf.webp" alt="Frente protegido con PPF 3M Scotchgard en BMW X6M Competition 0km" width="600" height="338" loading="lazy">
+                <img src="/assets/cases/0km/bmw-x6m-frontal-ppf.webp" alt="Frente protegido con PPF 3M Scotchgard en BMW X6M Competition 0km" width="600" height="338" loading="lazy" data-lightbox>
               </div>
               <div class="case-thumbs">
                 <div class="case-thumb-img">
-                  <img src="/assets/cases/0km/bmw-x6m-proceso.webp" alt="Proceso de instalación de lámina PPF en cabina" width="200" height="150" loading="lazy">
+                  <img src="/assets/cases/0km/bmw-x6m-proceso.webp" alt="Proceso de instalación de lámina PPF en cabina" width="200" height="150" loading="lazy" data-lightbox>
                 </div>
                 <div class="case-thumb-img">
-                  <img src="/assets/cases/0km/bmw-x6m-lateral.webp" alt="Lateral con brillo de espejo tras sellado cerámico" width="200" height="150" loading="lazy">
+                  <img src="/assets/cases/0km/bmw-x6m-lateral.webp" alt="Lateral con brillo de espejo tras sellado cerámico" width="200" height="150" loading="lazy" data-lightbox>
                 </div>
                 <div class="case-thumb-img">
-                  <img src="/assets/cases/0km/bmw-x6m-final.webp" alt="Entrega final de BMW X6M blindado estéticamente" width="200" height="150" loading="lazy">
+                  <img src="/assets/cases/0km/bmw-x6m-final.webp" alt="Entrega final de BMW X6M blindado estéticamente" width="200" height="150" loading="lazy" data-lightbox>
                 </div>
               </div>
             </div>
@@ -573,6 +584,9 @@
                 <li><strong>3. Polarizado Nano Cerámico:</strong> Reducción drástica del calor interior y protección UV en cristales laterales y luneta.</li>
               </ul>
               <a href="https://wa.me/5492613371061?text=Hola%20Blandini%20Detailing,%20vi%20el%20caso%20del%20BMW%20X6M%20y%20quiero%20proteger%20mi%20auto%200km." class="btn-primary" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true">
+                  <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.699c.969.54 1.772.88 2.791.88 3.182 0 5.768-2.587 5.768-5.766.001-3.187-2.575-5.766-5.768-5.766zm9.969 5.766c0 5.505-4.475 9.98-9.975 9.98-1.745 0-3.376-.452-4.801-1.242l-5.224 1.368 1.393-5.088c-.902-1.488-1.428-3.235-1.428-5.018 0-5.506 4.475-9.98 9.975-9.98s9.975 4.474 9.975 9.98zm-6.257 2.378c-.147-.247-.542-.395-.888-.568-.346-.173-2.049-1.012-2.37-1.129-.321-.118-.555-.173-.79.173-.235.346-.913 1.129-1.12 1.364-.207.235-.415.26-.761.086-.346-.173-1.46-.538-2.78-1.716-1.028-.918-1.722-2.052-1.924-2.398-.203-.346-.022-.533.152-.705.156-.155.346-.407.519-.611.173-.204.231-.346.346-.574.116-.228.058-.426-.029-.599-.086-.173-.79-1.902-1.082-2.605-.285-.685-.573-.591-.79-.602-.204-.01-.439-.012-.673-.012-.235 0-.617.088-.94.439-.323.351-1.235 1.208-1.235 2.946s1.265 3.42 1.442 3.655c.177.235 2.49 3.803 6.033 5.332.843.364 1.501.582 2.014.745.847.269 1.618.231 2.227.14.679-.101 2.049-.838 2.336-1.648.287-.81.287-1.505.201-1.649z"/>
+                </svg>
                 Consultar Protección para mi 0 km
               </a>
             </div>
@@ -591,10 +605,10 @@
               <!-- SLIDER COMPARADOR INTERACTIVO -->
               <div class="before-after-wrapper" id="beforeAfterSlider">
                 <div class="before-after-img-after">
-                  <img src="/assets/cases/before-after/blazer-motor-despues.webp" alt="Motor de Chevrolet Blazer restaurado y protegido con terminación mate después del detallado" width="600" height="338" loading="lazy">
+                  <img src="/assets/cases/before-after/blazer-motor-despues.webp" alt="Motor de Chevrolet Blazer restaurado y protegido con terminación mate después del detallado" width="600" height="338" loading="lazy" data-lightbox>
                 </div>
                 <div class="before-after-img-before">
-                  <img src="/assets/cases/before-after/blazer-motor-antes.webp" alt="Motor de Chevrolet Blazer con grasa y suciedad acumulada antes de la limpieza" width="600" height="338" loading="lazy">
+                  <img src="/assets/cases/before-after/blazer-motor-antes.webp" alt="Motor de Chevrolet Blazer con grasa y suciedad acumulada antes de la limpieza" width="600" height="338" loading="lazy" data-lightbox>
                 </div>
                 <div class="before-after-handle">
                   <div class="before-after-button">◀ ▶</div>
@@ -617,6 +631,9 @@
                 <li><strong>Resultado:</strong> Motor seguro y con aspecto de fábrica; pintura negra con profundidad de espejo restaurada.</li>
               </ul>
               <a href="https://wa.me/5492613371061?text=Hola,%20quiero%20hacerle%20una%20recuperación%20profunda%20de%20pintura%20y%20motor%20a%20mi%20vehículo." class="btn-primary" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true">
+                  <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.699c.969.54 1.772.88 2.791.88 3.182 0 5.768-2.587 5.768-5.766.001-3.187-2.575-5.766-5.768-5.766zm9.969 5.766c0 5.505-4.475 9.98-9.975 9.98-1.745 0-3.376-.452-4.801-1.242l-5.224 1.368 1.393-5.088c-.902-1.488-1.428-3.235-1.428-5.018 0-5.506 4.475-9.98 9.975-9.98s9.975 4.474 9.975 9.98zm-6.257 2.378c-.147-.247-.542-.395-.888-.568-.346-.173-2.049-1.012-2.37-1.129-.321-.118-.555-.173-.79.173-.235.346-.913 1.129-1.12 1.364-.207.235-.415.26-.761.086-.346-.173-1.46-.538-2.78-1.716-1.028-.918-1.722-2.052-1.924-2.398-.203-.346-.022-.533.152-.705.156-.155.346-.407.519-.611.173-.204.231-.346.346-.574.116-.228.058-.426-.029-.599-.086-.173-.79-1.902-1.082-2.605-.285-.685-.573-.591-.79-.602-.204-.01-.439-.012-.673-.012-.235 0-.617.088-.94.439-.323.351-1.235 1.208-1.235 2.946s1.265 3.42 1.442 3.655c.177.235 2.49 3.803 6.033 5.332.843.364 1.501.582 2.014.745.847.269 1.618.231 2.227.14.679-.101 2.049-.838 2.336-1.648.287-.81.287-1.505.201-1.649z"/>
+                </svg>
                 Pedir Diagnóstico para mi Vehículo
               </a>
             </div>
@@ -628,17 +645,17 @@
           <div class="case-study-layout">
             <div class="case-gallery">
               <div class="case-main-img">
-                <img src="/assets/cases/restoration/siambretta-final.webp" alt="Siambretta 125cc de 1954 restaurada conservando su pintura original de fábrica" width="600" height="338" loading="lazy">
+                <img src="/assets/cases/restoration/siambretta-final.webp" alt="Siambretta 125cc de 1954 restaurada conservando su pintura original de fábrica" width="600" height="338" loading="lazy" data-lightbox>
               </div>
               <div class="case-thumbs">
                 <div class="case-thumb-img">
-                  <img src="/assets/cases/restoration/siambretta-original.webp" alt="Estado original con pátina y óxido superficial" width="200" height="150" loading="lazy">
+                  <img src="/assets/cases/restoration/siambretta-original.webp" alt="Estado original con pátina y óxido superficial" width="200" height="150" loading="lazy" data-lightbox>
                 </div>
                 <div class="case-thumb-img">
-                  <img src="/assets/cases/restoration/siambretta-desarme.webp" alt="Desarme delicado de componentes históricos" width="200" height="150" loading="lazy">
+                  <img src="/assets/cases/restoration/siambretta-desarme.webp" alt="Desarme delicado de componentes históricos" width="200" height="150" loading="lazy" data-lightbox>
                 </div>
                 <div class="case-thumb-img">
-                  <img src="/assets/cases/restoration/siambretta-proceso.webp" alt="Pulido de conservación sin cortar esmalte original" width="200" height="150" loading="lazy">
+                  <img src="/assets/cases/restoration/siambretta-proceso.webp" alt="Pulido de conservación sin cortar esmalte original" width="200" height="150" loading="lazy" data-lightbox>
                 </div>
               </div>
             </div>
@@ -654,6 +671,9 @@
                 <li><strong>Protección de Metales:</strong> Pulido y sellado de metales para detener la corrosión futura y conservar el ADN original.</li>
               </ul>
               <a href="https://wa.me/5492613371061?text=Hola,%20tengo%20un%20vehículo%20clásico%20y%20quiero%20consultar%20por%20su%20preservación%20estética." class="btn-primary" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true">
+                  <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.699c.969.54 1.772.88 2.791.88 3.182 0 5.768-2.587 5.768-5.766.001-3.187-2.575-5.766-5.768-5.766zm9.969 5.766c0 5.505-4.475 9.98-9.975 9.98-1.745 0-3.376-.452-4.801-1.242l-5.224 1.368 1.393-5.088c-.902-1.488-1.428-3.235-1.428-5.018 0-5.506 4.475-9.98 9.975-9.98s9.975 4.474 9.975 9.98zm-6.257 2.378c-.147-.247-.542-.395-.888-.568-.346-.173-2.049-1.012-2.37-1.129-.321-.118-.555-.173-.79.173-.235.346-.913 1.129-1.12 1.364-.207.235-.415.26-.761.086-.346-.173-1.46-.538-2.78-1.716-1.028-.918-1.722-2.052-1.924-2.398-.203-.346-.022-.533.152-.705.156-.155.346-.407.519-.611.173-.204.231-.346.346-.574.116-.228.058-.426-.029-.599-.086-.173-.79-1.902-1.082-2.605-.285-.685-.573-.591-.79-.602-.204-.01-.439-.012-.673-.012-.235 0-.617.088-.94.439-.323.351-1.235 1.208-1.235 2.946s1.265 3.42 1.442 3.655c.177.235 2.49 3.803 6.033 5.332.843.364 1.501.582 2.014.745.847.269 1.618.231 2.227.14.679-.101 2.049-.838 2.336-1.648.287-.81.287-1.505.201-1.649z"/>
+                </svg>
                 Consultar Preservación de Clásicos
               </a>
             </div>
@@ -663,7 +683,7 @@
     </section>
 
     <!-- SECCIÓN 5: PROCESO DE TRABAJO (4 PASOS) -->
-    <section class="section-spacing">
+    <section class="section-spacing" id="proceso">
       <div class="container">
         <div class="section-header">
           <h2>Cómo cuidamos tu auto: nuestro método de trabajo en 4 pasos</h2>
@@ -707,7 +727,7 @@
     </section>
 
     <!-- SECCIÓN 6: TABLA COMPARATIVA TÉCNICA (AEO/GEO) -->
-    <section class="section-spacing" style="background-color: #0c0c0c;">
+    <section class="section-spacing" id="comparativa" style="background-color: #0c0c0c;">
       <div class="container">
         <div class="section-header">
           <h2>¿PPF, Tratamiento Cerámico o Cera Tradicional? Comparativa técnica</h2>
@@ -781,13 +801,8 @@
 
         <div class="comparison-cta-box">
           <a href="https://wa.me/5492613371061?text=Hola%20Blandini%20Detailing,%20tengo%20dudas%20entre%20hacer%20PPF%20o%20cerámico%20en%20mi%20auto." class="btn-primary" target="_blank" rel="noopener noreferrer">
-            ¿Dudas sobre cuál elegir para tu auto? Escribinos y te asesoramos sin cargo
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECCIÓN 7: PREGUNTAS FRECUENTES EXPANDIDAS (FAQS) -->
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true">
+              <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.699c.969.54 1.772.88 2.791.88 3.182 0 5.768-2.587 5.768-5.766.001-3.187-2.575-5.766-5.768-5.766zm9.969 5.766c0 5.505-4.475 9.98-9.975 9.98-1.745 0-3.376-.452-4.801-1.242l-5.224 1.368 1.393-5.088c-.902-1.488-1.428-3.235-1.428-5.018 0-5.506 4.475-9.98 9.975-9.98s9.975 4.474 9.975 9.98zm-6.257 2.378c-.147-.247-.542-.395-.888-.568-.346-.173-2.049-1.012-2.37-1.129-.321-.118-.555-.173-.79.173-.235.346-.913 1.129-1.12 1.364-.207.235-.415.26-.761.086-.346-.173-1.46-.538-2.78-1.716-1.028-.918-1.722-2.052-1.924-2.398-.203-.346-.022-.533.152-.70    <!-- SECCIÓN 7: PREGUNTAS FRECUENTES EXPANDIDAS (FAQS) -->
     <section class="section-spacing" id="faq">
       <div class="container">
         <div class="section-header">
@@ -918,7 +933,10 @@
               </div>
 
               <div class="contact-data-item">
-                <svg class="contact-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                <!-- Ícono oficial de WhatsApp -->
+                <svg class="contact-icon" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.699c.969.54 1.772.88 2.791.88 3.182 0 5.768-2.587 5.768-5.766.001-3.187-2.575-5.766-5.768-5.766zm9.969 5.766c0 5.505-4.475 9.98-9.975 9.98-1.745 0-3.376-.452-4.801-1.242l-5.224 1.368 1.393-5.088c-.902-1.488-1.428-3.235-1.428-5.018 0-5.506 4.475-9.98 9.975-9.98s9.975 4.474 9.975 9.98zm-6.257 2.378c-.147-.247-.542-.395-.888-.568-.346-.173-2.049-1.012-2.37-1.129-.321-.118-.555-.173-.79.173-.235.346-.913 1.129-1.12 1.364-.207.235-.415.26-.761.086-.346-.173-1.46-.538-2.78-1.716-1.028-.918-1.722-2.052-1.924-2.398-.203-.346-.022-.533.152-.705.156-.155.346-.407.519-.611.173-.204.231-.346.346-.574.116-.228.058-.426-.029-.599-.086-.173-.79-1.902-1.082-2.605-.285-.685-.573-.591-.79-.602-.204-.01-.439-.012-.673-.012-.235 0-.617.088-.94.439-.323.351-1.235 1.208-1.235 2.946s1.265 3.42 1.442 3.655c.177.235 2.49 3.803 6.033 5.332.843.364 1.501.582 2.014.745.847.269 1.618.231 2.227.14.679-.101 2.049-.838 2.336-1.648.287-.81.287-1.505.201-1.649z"/>
+                </svg>
                 <div>
                   <strong>Canal Directo de WhatsApp</strong>
                   <a href="https://wa.me/5492613371061" target="_blank" rel="noopener noreferrer">+54 9 261 337-1061</a>
@@ -935,6 +953,9 @@
             </div>
 
             <a href="https://wa.me/5492613371061?text=Hola%20Blandini%20Detailing,%20quiero%20coordinar%20una%20visita%20para%20evaluar%20mi%20auto." class="btn-primary" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true">
+                <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.699c.969.54 1.772.88 2.791.88 3.182 0 5.768-2.587 5.768-5.766.001-3.187-2.575-5.766-5.768-5.766zm9.969 5.766c0 5.505-4.475 9.98-9.975 9.98-1.745 0-3.376-.452-4.801-1.242l-5.224 1.368 1.393-5.088c-.902-1.488-1.428-3.235-1.428-5.018 0-5.506 4.475-9.98 9.975-9.98s9.975 4.474 9.975 9.98zm-6.257 2.378c-.147-.247-.542-.395-.888-.568-.346-.173-2.049-1.012-2.37-1.129-.321-.118-.555-.173-.79.173-.235.346-.913 1.129-1.12 1.364-.207.235-.415.26-.761.086-.346-.173-1.46-.538-2.78-1.716-1.028-.918-1.722-2.052-1.924-2.398-.203-.346-.022-.533.152-.705.156-.155.346-.407.519-.611.173-.204.231-.346.346-.574.116-.228.058-.426-.029-.599-.086-.173-.79-1.902-1.082-2.605-.285-.685-.573-.591-.79-.602-.204-.01-.439-.012-.673-.012-.235 0-.617.088-.94.439-.323.351-1.235 1.208-1.235 2.946s1.265 3.42 1.442 3.655c.177.235 2.49 3.803 6.033 5.332.843.364 1.501.582 2.014.745.847.269 1.618.231 2.227.14.679-.101 2.049-.838 2.336-1.648.287-.81.287-1.505.201-1.649z"/>
+              </svg>
               Hablar con un Especialista por WhatsApp
             </a>
           </div>
@@ -948,7 +969,7 @@
               style="border:0;" 
               allowfullscreen="" 
               loading="lazy" 
-              referrerpolicy="no-referrer-when-downgrade"
+              referrerpolicy="no-referrer-when-downgrade" 
               title="Ubicación de Blandini Detailing en Google Maps">
             </iframe>
           </div>
@@ -962,7 +983,8 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <img src="/assets/brand/logo-blandini-yellow.svg" alt="Blandini Detailing" width="160" height="38" loading="lazy">
+          <!-- Logo Real en Footer -->
+          <img src="/assets/brand/logo.png" alt="Blandini Detailing" class="brand-logo" loading="lazy">
           <p>
             <strong>Expertos en estética automotriz.</strong> Taller boutique de detailing, protección de pintura con PPF certificado 3M, tratamientos cerámicos y restauración estética en Mendoza.
           </p>
@@ -971,9 +993,10 @@
         <div>
           <h4 class="footer-title">Navegación</h4>
           <ul class="footer-links">
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#certificacion-3m">Certificación 3M</a></li>
             <li><a href="#servicios">Servicios</a></li>
             <li><a href="#casos">Casos Reales</a></li>
-            <li><a href="#certificacion-3m">Certificación 3M</a></li>
             <li><a href="#faq">Preguntas Frecuentes</a></li>
             <li><a href="#contacto">Ubicación y Turnos</a></li>
           </ul>
@@ -993,22 +1016,37 @@
 
       <div class="footer-bottom">
         <div>© 2026 Blandini Detailing. Todos los derechos reservados.</div>
-        <div>Diseño y Estrategia Digital por WAFLERS.</div>
+        <!-- Firma de WAFLERS requerida -->
+        <div>Diseño y Estrategia Digital por <a href="#" class="waflers-link">WAFLERS</a></div>
       </div>
     </div>
   </footer>
 
-  <!-- BOTÓN FLOTANTE PERSISTENTE DE WHATSAPP -->
+  <!-- BOTÓN FLOTANTE PERSISTENTE DE WHATSAPP CON ÍCONO OFICIAL SÓLIDO -->
   <a href="https://wa.me/5492613371061?text=Hola%20Blandini%20Detailing,%20quiero%20consultar%20un%20presupuesto%20para%20mi%20vehículo." 
      class="floating-whatsapp" 
      target="_blank" 
      rel="noopener noreferrer" 
      aria-label="Contactar a Blandini Detailing por WhatsApp"
      title="Chatear por WhatsApp con Blandini Detailing">
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>
+    <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor" aria-hidden="true">
+      <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.699c.969.54 1.772.88 2.791.88 3.182 0 5.768-2.587 5.768-5.766.001-3.187-2.575-5.766-5.768-5.766zm9.969 5.766c0 5.505-4.475 9.98-9.975 9.98-1.745 0-3.376-.452-4.801-1.242l-5.224 1.368 1.393-5.088c-.902-1.488-1.428-3.235-1.428-5.018 0-5.506 4.475-9.98 9.975-9.98s9.975 4.474 9.975 9.98zm-6.257 2.378c-.147-.247-.542-.395-.888-.568-.346-.173-2.049-1.012-2.37-1.129-.321-.118-.555-.173-.79.173-.235.346-.913 1.129-1.12 1.364-.207.235-.415.26-.761.086-.346-.173-1.46-.538-2.78-1.716-1.028-.918-1.722-2.052-1.924-2.398-.203-.346-.022-.533.152-.705.156-.155.346-.407.519-.611.173-.204.231-.346.346-.574.116-.228.058-.426-.029-.599-.086-.173-.79-1.902-1.082-2.605-.285-.685-.573-.591-.79-.602-.204-.01-.439-.012-.673-.012-.235 0-.617.088-.94.439-.323.351-1.235 1.208-1.235 2.946s1.265 3.42 1.442 3.655c.177.235 2.49 3.803 6.033 5.332.843.364 1.501.582 2.014.745.847.269 1.618.231 2.227.14.679-.101 2.049-.838 2.336-1.648.287-.81.287-1.505.201-1.649z"/>
     </svg>
   </a>
+
+  <!-- MODAL / LIGHTBOX PARA VISUALIZACIÓN DE IMÁGENES EN PANTALLA COMPLETA -->
+  <div class="lightbox-modal" id="lightboxModal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Visualizador de imágenes en pantalla completa">
+    <div class="lightbox-overlay" id="lightboxOverlay"></div>
+    <div class="lightbox-container">
+      <button class="lightbox-btn lightbox-close" id="lightboxClose" aria-label="Cerrar imagen">&times;</button>
+      <button class="lightbox-btn lightbox-prev" id="lightboxPrev" aria-label="Imagen anterior">&#10094;</button>
+      <button class="lightbox-btn lightbox-next" id="lightboxNext" aria-label="Siguiente imagen">&#10095;</button>
+      <div class="lightbox-media-wrapper">
+        <img src="" alt="" id="lightboxImg" class="lightbox-img">
+        <div class="lightbox-caption" id="lightboxCaption"></div>
+      </div>
+    </div>
+  </div>
 
   <!-- Script Modular -->
   <script src="main.js"></script>

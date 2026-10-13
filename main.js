@@ -7,11 +7,13 @@ document.addEventListener('DOMContentLoaded', () => {
   initMobileNav();
   initBeforeAfterSlider();
   initBeforeAfterTabs();
+  initCarouselArrows();
+  initLightbox();
   initScrollSpy();
 });
 
 /**
- * 1. Menú Móvil Accesible
+ * 1. Menú Móvil Accesible (Drawer & Toggle)
  */
 function initMobileNav() {
   const hamburger = document.getElementById('hamburgerBtn');
@@ -23,7 +25,7 @@ function initMobileNav() {
   function toggleMenu() {
     const isOpen = hamburger.classList.toggle('active');
     mobileNav.classList.toggle('open');
-    hamburger.setAttribute('aria-expanded', isOpen);
+    hamburger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     document.body.style.overflow = isOpen ? 'hidden' : '';
   }
 
@@ -100,7 +102,7 @@ function initBeforeAfterSlider() {
   container.addEventListener('mousedown', onPointerDown);
   container.addEventListener('touchstart', onPointerDown, { passive: true });
 
-  // Soporte de accesibilidad por teclado
+  // Accesibilidad por teclado (slider role)
   handle.setAttribute('tabindex', '0');
   handle.setAttribute('role', 'slider');
   handle.setAttribute('aria-label', 'Comparador de imágenes antes y después');
@@ -123,7 +125,7 @@ function initBeforeAfterSlider() {
 }
 
 /**
- * 3. Pestañas de Alternancia Antes y Después (Motor vs Chapa)
+ * 3. Pestañas de Alternancia Antes y Después (Vano Motor vs Chapa)
  */
 function initBeforeAfterTabs() {
   const tabs = document.querySelectorAll('.tab-btn[data-case]');
@@ -167,31 +169,178 @@ function initBeforeAfterTabs() {
 }
 
 /**
- * 4. Navegación Activa por Scroll (Intersection Observer)
+ * 4. Control de Flechas del Carrusel en Desktop (◀ y ▶)
+ */
+function initCarouselArrows() {
+  const track = document.getElementById('carouselTrack');
+  const prevBtn = document.getElementById('carouselPrevBtn');
+  const nextBtn = document.getElementById('carouselNextBtn');
+
+  if (!track || !prevBtn || !nextBtn) return;
+
+  function getScrollDistance() {
+    const firstItem = track.querySelector('.carousel-item');
+    if (!firstItem) return 380;
+    // Ancho del item + gap (16px)
+    return firstItem.offsetWidth + 16;
+  }
+
+  prevBtn.addEventListener('click', () => {
+    const distance = getScrollDistance();
+    track.scrollBy({ left: -distance, behavior: 'smooth' });
+  });
+
+  nextBtn.addEventListener('click', () => {
+    const distance = getScrollDistance();
+    track.scrollBy({ left: distance, behavior: 'smooth' });
+  });
+}
+
+/**
+ * 5. Modal / Lightbox de Pantalla Completa en Vanilla JS
+ */
+function initLightbox() {
+  const modal = document.getElementById('lightboxModal');
+  const overlay = document.getElementById('lightboxOverlay');
+  const closeBtn = document.getElementById('lightboxClose');
+  const prevBtn = document.getElementById('lightboxPrev');
+  const nextBtn = document.getElementById('lightboxNext');
+  const imgElement = document.getElementById('lightboxImg');
+  const captionElement = document.getElementById('lightboxCaption');
+
+  if (!modal || !imgElement) return;
+
+  // Colección de imágenes con soporte lightbox (excluyendo el slider arrastrable para no bloquear gestos)
+  const imageElements = Array.from(document.querySelectorAll('img[data-lightbox]')).filter(img => {
+    return !img.closest('#beforeAfterSlider');
+  });
+
+  if (!imageElements.length) return;
+
+  let currentIndex = 0;
+
+  function updateLightbox(index) {
+    currentIndex = (index + imageElements.length) % imageElements.length;
+    const targetImg = imageElements[currentIndex];
+
+    imgElement.src = targetImg.getAttribute('src');
+    imgElement.alt = targetImg.getAttribute('alt') || 'Imagen ampliada de Blandini Detailing';
+
+    // Obtener leyenda si existe en el contenedor padre
+    const captionContainer = targetImg.parentElement ? targetImg.parentElement.querySelector('.carousel-caption') : null;
+    const captionText = captionContainer ? captionContainer.textContent : targetImg.getAttribute('alt');
+    if (captionElement) {
+      captionElement.textContent = captionText || '';
+    }
+  }
+
+  function openLightbox(index) {
+    updateLightbox(index);
+    modal.classList.add('active');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    modal.classList.remove('active');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  // Vincular eventos de apertura a cada imagen
+  imageElements.forEach((img, idx) => {
+    img.style.cursor = 'zoom-in';
+    img.addEventListener('click', (e) => {
+      e.preventDefault();
+      openLightbox(idx);
+    });
+  });
+
+  // Eventos de controles del Lightbox
+  if (closeBtn) closeBtn.addEventListener('click', closeLightbox);
+  if (overlay) overlay.addEventListener('click', closeLightbox);
+
+  if (prevBtn) {
+    prevBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      updateLightbox(currentIndex - 1);
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      updateLightbox(currentIndex + 1);
+    });
+  }
+
+  // Controles por teclado: Escape para cerrar, Flechas para navegar
+  document.addEventListener('keydown', (e) => {
+    if (!modal.classList.contains('active')) return;
+
+    if (e.key === 'Escape') {
+      closeLightbox();
+    } else if (e.key === 'ArrowLeft') {
+      updateLightbox(currentIndex - 1);
+    } else if (e.key === 'ArrowRight') {
+      updateLightbox(currentIndex + 1);
+    }
+  });
+}
+
+/**
+ * 6. ScrollSpy y Resaltado de Sección Activa (Intersection Observer)
+ * Sincroniza orden exacto: #inicio -> #certificacion-3m -> #servicios -> #casos -> #faq -> #contacto
  */
 function initScrollSpy() {
-  const sections = document.querySelectorAll('section[id]');
-  const navLinks = document.querySelectorAll('.nav-link');
+  const targetIds = ['inicio', 'certificacion-3m', 'servicios', 'casos', 'faq', 'contacto'];
+  const sections = targetIds.map(id => document.getElementById(id)).filter(Boolean);
+  const desktopLinks = document.querySelectorAll('.nav-menu .nav-link');
+  const mobileLinks = document.querySelectorAll('.mobile-nav .mobile-nav-link');
 
-  if (!sections.length || !navLinks.length) return;
+  if (!sections.length || (!desktopLinks.length && !mobileLinks.length)) return;
 
+  function setActiveLink(activeId) {
+    desktopLinks.forEach(link => {
+      const href = link.getAttribute('href');
+      if (href === `#${activeId}`) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
+
+    mobileLinks.forEach(link => {
+      const href = link.getAttribute('href');
+      if (href === `#${activeId}`) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
+  }
+
+  // Intersection Observer para detectar sección dominante
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        const id = entry.target.getAttribute('id');
-        navLinks.forEach(link => {
-          if (link.getAttribute('href') === `#${id}`) {
-            link.classList.add('active');
-          } else {
-            link.classList.remove('active');
-          }
-        });
+        setActiveLink(entry.target.id);
       }
     });
   }, {
-    threshold: 0.35,
-    rootMargin: "-68px 0px 0px 0px"
+    rootMargin: '-20% 0px -55% 0px',
+    threshold: 0
   });
 
-  sections.forEach(sec => observer.observe(sec));
+  sections.forEach(section => observer.observe(section));
+
+  // Manejo de scroll en el límite inferior para activar la última sección (#contacto)
+  window.addEventListener('scroll', () => {
+    const isAtBottom = (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 60);
+    if (isAtBottom) {
+      setActiveLink('contacto');
+    } else if (window.scrollY < 100) {
+      setActiveLink('inicio');
+    }
+  }, { passive: true });
 }
