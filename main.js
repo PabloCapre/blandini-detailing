@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initMobileNav();
   initBeforeAfterSlider();
   initBeforeAfterTabs();
-  initCarouselArrows();
+  initCarousel();
   initLightbox();
   initScrollSpy();
 });
@@ -169,40 +169,255 @@ function initBeforeAfterTabs() {
 }
 
 /**
- * 4. Control de Flechas del Carrusel en Desktop (◀ y ▶)
- * Con soporte de scroll suave y comportamiento cíclico
+ * 4. Carrusel Infinito con Autoplay y Control Táctil/Desktop
+ * - 22 fotos de alta gama con loop infinito fluido (sin retrocesos bruscos en el scroll)
+ * - Autoplay continuo cada 3 segundos (setInterval)
+ * - Pausa temporal ante interacción manual (touch, pointer, scroll manual, wheel, flechas)
+ * - Desplazamiento suave con flechas desktop y soporte cíclico bidireccional
  */
-function initCarouselArrows() {
+function initCarousel() {
   const track = document.getElementById('carouselTrack');
   const prevBtn = document.getElementById('carouselPrevBtn');
   const nextBtn = document.getElementById('carouselNextBtn');
 
-  if (!track || !prevBtn || !nextBtn) return;
+  if (!track) return;
 
-  function getScrollDistance() {
-    const firstItem = track.querySelector('.carousel-item');
-    if (!firstItem) return 380;
-    // Ancho del item + gap (16px)
-    return firstItem.offsetWidth + 16;
+  const originalItems = Array.from(track.querySelectorAll('.carousel-item'));
+  if (!originalItems.length) return;
+
+  // 1. Asignar índices a imágenes originales para navegación precisa del modal
+  originalItems.forEach((item, idx) => {
+    const img = item.querySelector('img');
+    if (img) img.dataset.galleryIndex = idx.toString();
+  });
+
+  // 2. Clones dinámicos al final para lograr el loop infinito continuo sin saltos visuales
+  // Clonamos 6 elementos para cubrir cualquier viewport (mobile, desktop 3 items, ultrawide)
+  const cloneCount = Math.min(6, originalItems.length);
+  for (let i = 0; i < cloneCount; i++) {
+    const clone = originalItems[i].cloneNode(true);
+    clone.classList.add('carousel-clone');
+    clone.setAttribute('aria-hidden', 'true');
+    const cloneImg = clone.querySelector('img');
+    if (cloneImg) {
+      cloneImg.dataset.galleryIndex = i.toString();
+    }
+    track.appendChild(clone);
   }
 
-  prevBtn.addEventListener('click', () => {
-    const distance = getScrollDistance();
-    if (track.scrollLeft <= 10) {
-      track.scrollTo({ left: track.scrollWidth, behavior: 'smooth' });
+  // Medición dinámica del paso entre imágenes y del umbral de loop
+  function getStepDistance() {
+    if (originalItems.length >= 2) {
+      const dist = originalItems[1].offsetLeft - originalItems[0].offsetLeft;
+      if (dist > 0) return dist;
+    }
+    return originalItems[0].offsetWidth + 16;
+  }
+
+  function getLoopThreshold() {
+    const firstClone = track.querySelector('.carousel-clone');
+    if (firstClone && originalItems.length > 0) {
+      const thresh = firstClone.offsetLeft - originalItems[0].offsetLeft;
+      if (thresh > 0) return thresh;
+    }
+    return originalItems.length * getStepDistance();
+  }
+
+  // 3. Reseteo instantáneo transparente cuando el scroll entra en la zona clonada
+  let isResetting = false;
+  function checkAndResetLoop() {
+    if (isResetting) return;
+    const threshold = getLoopThreshold();
+    if (threshold <= 0) return;
+
+    if (track.scrollLeft >= threshold - 4) {
+      isResetting = true;
+      const prevBehavior = track.style.scrollBehavior;
+      const prevSnap = track.style.scrollSnapType;
+
+      track.style.scrollBehavior = 'auto';
+      track.style.scrollSnapType = 'none';
+
+      track.scrollLeft -= threshold;
+
+      void track.offsetWidth; // Forzar reflow sincrónico
+
+      track.style.scrollBehavior = prevBehavior;
+      track.style.scrollSnapType = prevSnap;
+      isResetting = false;
+    }
+  }
+
+  // 4. Navegación programática con flags para evitar colisiones con scroll manual
+  let isProgrammaticScroll = false;
+  let programmaticTimer = null;
+
+  function markProgrammaticScroll() {
+    isProgrammaticScroll = true;
+    if (programmaticTimer) clearTimeout(programmaticTimer);
+    programmaticTimer = setTimeout(() => {
+      isProgrammaticScroll = false;
+    }, 750);
+  }
+
+  function scrollNext() {
+    const step = getStepDistance();
+    const threshold = getLoopThreshold();
+
+    if (track.scrollLeft >= threshold - 4) {
+      checkAndResetLoop();
+    }
+
+    markProgrammaticScroll();
+    track.scrollBy({ left: step, behavior: 'smooth' });
+
+    setTimeout(() => {
+      checkAndResetLoop();
+    }, 650);
+  }
+
+  function scrollPrev() {
+    const step = getStepDistance();
+    const threshold = getLoopThreshold();
+
+    // Si estamos en la primera imagen (cerca de 0), saltar transparentemente a los clones
+    // y retroceder suavemente hacia la última imagen original sin rebobinar
+    if (track.scrollLeft <= 10 && threshold > 0) {
+      const prevBehavior = track.style.scrollBehavior;
+      const prevSnap = track.style.scrollSnapType;
+
+      track.style.scrollBehavior = 'auto';
+      track.style.scrollSnapType = 'none';
+
+      track.scrollLeft = threshold;
+
+      void track.offsetWidth;
+
+      track.style.scrollBehavior = prevBehavior;
+      track.style.scrollSnapType = prevSnap;
+
+      markProgrammaticScroll();
+      track.scrollBy({ left: -step, behavior: 'smooth' });
     } else {
-      track.scrollBy({ left: -distance, behavior: 'smooth' });
+      markProgrammaticScroll();
+      track.scrollBy({ left: -step, behavior: 'smooth' });
+    }
+
+    setTimeout(() => {
+      checkAndResetLoop();
+    }, 650);
+  }
+
+  // 5. Autoplay de 3 segundos con Pausa Temporal reactiva
+  const AUTOPLAY_INTERVAL = 3000;
+  const RESUME_DELAY = 4000;
+  let autoplayIntervalId = null;
+  let resumeTimeoutId = null;
+  let isLightboxOpen = false;
+
+  function startAutoplay() {
+    stopAutoplay();
+    if (isLightboxOpen || document.hidden) return;
+
+    autoplayIntervalId = setInterval(() => {
+      if (!isLightboxOpen && !document.hidden) {
+        scrollNext();
+      }
+    }, AUTOPLAY_INTERVAL);
+  }
+
+  function stopAutoplay() {
+    if (autoplayIntervalId) {
+      clearInterval(autoplayIntervalId);
+      autoplayIntervalId = null;
+    }
+  }
+
+  function pauseAutoplayTemporarily() {
+    stopAutoplay();
+    if (resumeTimeoutId) clearTimeout(resumeTimeoutId);
+
+    resumeTimeoutId = setTimeout(() => {
+      startAutoplay();
+    }, RESUME_DELAY);
+  }
+
+  // Iniciar ciclo de reproducción automática
+  startAutoplay();
+
+  // 6. Listeners de interacción del usuario (Pausa y Reanudación inteligente)
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+      pauseAutoplayTemporarily();
+      scrollPrev();
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      pauseAutoplayTemporarily();
+      scrollNext();
+    });
+  }
+
+  // Gestos táctiles en mobile / tablet
+  track.addEventListener('touchstart', () => {
+    stopAutoplay();
+  }, { passive: true });
+
+  track.addEventListener('touchmove', () => {
+    stopAutoplay();
+  }, { passive: true });
+
+  track.addEventListener('touchend', () => {
+    pauseAutoplayTemporarily();
+  }, { passive: true });
+
+  // Puntero y ratón en desktop
+  track.addEventListener('mouseenter', () => {
+    stopAutoplay();
+  });
+
+  track.addEventListener('mouseleave', () => {
+    startAutoplay();
+  });
+
+  // Scroll manual (trackpad horizontal, rueda o arrastre)
+  track.addEventListener('wheel', () => {
+    pauseAutoplayTemporarily();
+  }, { passive: true });
+
+  track.addEventListener('scroll', () => {
+    if (!isProgrammaticScroll) {
+      pauseAutoplayTemporarily();
+    }
+    checkAndResetLoop();
+  }, { passive: true });
+
+  if ('onscrollend' in window) {
+    track.addEventListener('scrollend', () => {
+      checkAndResetLoop();
+    });
+  }
+
+  // Pausa cuando la pestaña no está visible para ahorrar CPU y evitar desincronización
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      stopAutoplay();
+    } else {
+      startAutoplay();
     }
   });
 
-  nextBtn.addEventListener('click', () => {
-    const distance = getScrollDistance();
-    const maxScroll = track.scrollWidth - track.clientWidth;
-    if (track.scrollLeft >= maxScroll - 10) {
-      track.scrollTo({ left: 0, behavior: 'smooth' });
-    } else {
-      track.scrollBy({ left: distance, behavior: 'smooth' });
-    }
+  // Integración con el Lightbox (pausa cuando el modal está abierto en pantalla completa)
+  document.addEventListener('lightbox:open', () => {
+    isLightboxOpen = true;
+    stopAutoplay();
+  });
+
+  document.addEventListener('lightbox:close', () => {
+    isLightboxOpen = false;
+    startAutoplay();
   });
 }
 
@@ -217,7 +432,6 @@ function initLightbox() {
   const prevBtn = document.getElementById('lightboxPrev');
   const nextBtn = document.getElementById('lightboxNext');
   const imgElement = document.getElementById('lightboxImg');
-  const captionElement = document.getElementById('lightboxCaption');
 
   if (!modal || !imgElement) return;
 
@@ -232,13 +446,6 @@ function initLightbox() {
 
     imgElement.src = targetImg.getAttribute('src');
     imgElement.alt = targetImg.getAttribute('alt') || 'Imagen ampliada de Blandini Detailing';
-
-    // Obtener leyenda si existe en el contenedor padre
-    const captionContainer = targetImg.parentElement ? targetImg.parentElement.querySelector('.carousel-caption') : null;
-    const captionText = captionContainer ? captionContainer.textContent : targetImg.getAttribute('alt');
-    if (captionElement) {
-      captionElement.textContent = captionText || '';
-    }
 
     // Gestionar visibilidad de flechas según la cantidad de imágenes de la galería activa
     const hasMultiple = activeImages.length > 1;
@@ -267,25 +474,28 @@ function initLightbox() {
     modal.classList.add('active');
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+    document.dispatchEvent(new CustomEvent('lightbox:open'));
   }
 
   function closeLightbox() {
     modal.classList.remove('active');
     modal.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
+    document.dispatchEvent(new CustomEvent('lightbox:close'));
   }
 
   // --- 1. ENCAPSULAMIENTO DE SCOPE: CARRUSEL PRINCIPAL ---
-  // El array de imágenes del carrusel busca exclusivamente dentro de su contenedor (.carousel-track)
+  // El modal encapsula exclusivamente la colección de las 22 imágenes originales
   const carouselTrack = document.getElementById('carouselTrack') || document.querySelector('.carousel-track');
   if (carouselTrack) {
-    const carouselImages = Array.from(carouselTrack.querySelectorAll('img'));
-    carouselImages.forEach((img, idx) => {
-      img.style.cursor = 'zoom-in';
-      img.addEventListener('click', (e) => {
-        e.preventDefault();
-        openLightbox(carouselImages, idx);
-      });
+    carouselTrack.addEventListener('click', (e) => {
+      const clickedImg = e.target.closest('img');
+      if (!clickedImg) return;
+      e.preventDefault();
+
+      const originalImages = Array.from(carouselTrack.querySelectorAll('.carousel-item:not(.carousel-clone) img'));
+      const galleryIndex = parseInt(clickedImg.dataset.galleryIndex || '0', 10);
+      openLightbox(originalImages, galleryIndex);
     });
   }
 
