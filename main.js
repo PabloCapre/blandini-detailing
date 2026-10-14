@@ -170,6 +170,7 @@ function initBeforeAfterTabs() {
 
 /**
  * 4. Control de Flechas del Carrusel en Desktop (◀ y ▶)
+ * Con soporte de scroll suave y comportamiento cíclico
  */
 function initCarouselArrows() {
   const track = document.getElementById('carouselTrack');
@@ -187,17 +188,27 @@ function initCarouselArrows() {
 
   prevBtn.addEventListener('click', () => {
     const distance = getScrollDistance();
-    track.scrollBy({ left: -distance, behavior: 'smooth' });
+    if (track.scrollLeft <= 10) {
+      track.scrollTo({ left: track.scrollWidth, behavior: 'smooth' });
+    } else {
+      track.scrollBy({ left: -distance, behavior: 'smooth' });
+    }
   });
 
   nextBtn.addEventListener('click', () => {
     const distance = getScrollDistance();
-    track.scrollBy({ left: distance, behavior: 'smooth' });
+    const maxScroll = track.scrollWidth - track.clientWidth;
+    if (track.scrollLeft >= maxScroll - 10) {
+      track.scrollTo({ left: 0, behavior: 'smooth' });
+    } else {
+      track.scrollBy({ left: distance, behavior: 'smooth' });
+    }
   });
 }
 
 /**
  * 5. Modal / Lightbox de Pantalla Completa en Vanilla JS
+ * Con encapsulamiento estricto de scope por componente y navegación cíclica (loop)
  */
 function initLightbox() {
   const modal = document.getElementById('lightboxModal');
@@ -210,18 +221,14 @@ function initLightbox() {
 
   if (!modal || !imgElement) return;
 
-  // Colección de imágenes con soporte lightbox (excluyendo el slider arrastrable para no bloquear gestos)
-  const imageElements = Array.from(document.querySelectorAll('img[data-lightbox]')).filter(img => {
-    return !img.closest('#beforeAfterSlider');
-  });
-
-  if (!imageElements.length) return;
-
+  // Estado del modal activo: colección encapsulada de imágenes e índice actual
+  let activeImages = [];
   let currentIndex = 0;
 
   function updateLightbox(index) {
-    currentIndex = (index + imageElements.length) % imageElements.length;
-    const targetImg = imageElements[currentIndex];
+    if (!activeImages.length) return;
+    currentIndex = index;
+    const targetImg = activeImages[currentIndex];
 
     imgElement.src = targetImg.getAttribute('src');
     imgElement.alt = targetImg.getAttribute('alt') || 'Imagen ampliada de Blandini Detailing';
@@ -232,10 +239,31 @@ function initLightbox() {
     if (captionElement) {
       captionElement.textContent = captionText || '';
     }
+
+    // Gestionar visibilidad de flechas según la cantidad de imágenes de la galería activa
+    const hasMultiple = activeImages.length > 1;
+    if (prevBtn) prevBtn.style.display = hasMultiple ? 'flex' : 'none';
+    if (nextBtn) nextBtn.style.display = hasMultiple ? 'flex' : 'none';
   }
 
-  function openLightbox(index) {
-    updateLightbox(index);
+  // Comportamiento Cíclico (Loop): Al llegar a la última foto, el índice vuelve a 0
+  function showNext() {
+    if (!activeImages.length) return;
+    const nextIndex = (currentIndex >= activeImages.length - 1) ? 0 : currentIndex + 1;
+    updateLightbox(nextIndex);
+  }
+
+  // Comportamiento Cíclico (Loop): Al presionar izquierda en la primera foto, va a la última
+  function showPrev() {
+    if (!activeImages.length) return;
+    const prevIndex = (currentIndex <= 0) ? activeImages.length - 1 : currentIndex - 1;
+    updateLightbox(prevIndex);
+  }
+
+  function openLightbox(galleryImages, startIndex = 0) {
+    if (!galleryImages || !galleryImages.length) return;
+    activeImages = galleryImages;
+    updateLightbox(startIndex);
     modal.classList.add('active');
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
@@ -247,12 +275,48 @@ function initLightbox() {
     document.body.style.overflow = '';
   }
 
-  // Vincular eventos de apertura a cada imagen
-  imageElements.forEach((img, idx) => {
+  // --- 1. ENCAPSULAMIENTO DE SCOPE: CARRUSEL PRINCIPAL ---
+  // El array de imágenes del carrusel busca exclusivamente dentro de su contenedor (.carousel-track)
+  const carouselTrack = document.getElementById('carouselTrack') || document.querySelector('.carousel-track');
+  if (carouselTrack) {
+    const carouselImages = Array.from(carouselTrack.querySelectorAll('img'));
+    carouselImages.forEach((img, idx) => {
+      img.style.cursor = 'zoom-in';
+      img.addEventListener('click', (e) => {
+        e.preventDefault();
+        openLightbox(carouselImages, idx);
+      });
+    });
+  }
+
+  // --- 2. ENCAPSULAMIENTO DE SCOPE: CASOS DE ESTUDIO ---
+  // Si el modal abre un caso de estudio, encapsula únicamente las fotos de ese caso
+  const caseBlocks = document.querySelectorAll('.case-study-block');
+  caseBlocks.forEach(caseBlock => {
+    // Buscar fotos de la galería del caso, excluyendo controles interactivos de comparación
+    const caseImages = Array.from(caseBlock.querySelectorAll('.case-gallery img')).filter(img => {
+      return !img.closest('#beforeAfterSlider');
+    });
+
+    caseImages.forEach((img, idx) => {
+      img.style.cursor = 'zoom-in';
+      img.addEventListener('click', (e) => {
+        e.preventDefault();
+        openLightbox(caseImages, idx);
+      });
+    });
+  });
+
+  // --- 3. ENCAPSULAMIENTO DE SCOPE: FOTOS INDEPENDIENTES ---
+  // Imágenes con data-lightbox fuera de carrusel y casos de estudio (ej. Certificación 3M)
+  const standaloneImages = Array.from(document.querySelectorAll('img[data-lightbox]')).filter(img => {
+    return !img.closest('.carousel-track') && !img.closest('.case-study-block') && !img.closest('#beforeAfterSlider');
+  });
+  standaloneImages.forEach(img => {
     img.style.cursor = 'zoom-in';
     img.addEventListener('click', (e) => {
       e.preventDefault();
-      openLightbox(idx);
+      openLightbox([img], 0);
     });
   });
 
@@ -263,27 +327,27 @@ function initLightbox() {
   if (prevBtn) {
     prevBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      updateLightbox(currentIndex - 1);
+      showPrev();
     });
   }
 
   if (nextBtn) {
     nextBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      updateLightbox(currentIndex + 1);
+      showNext();
     });
   }
 
-  // Controles por teclado: Escape para cerrar, Flechas para navegar
+  // Controles por teclado: Escape para cerrar, Flechas para navegar cíclicamente
   document.addEventListener('keydown', (e) => {
     if (!modal.classList.contains('active')) return;
 
     if (e.key === 'Escape') {
       closeLightbox();
     } else if (e.key === 'ArrowLeft') {
-      updateLightbox(currentIndex - 1);
+      showPrev();
     } else if (e.key === 'ArrowRight') {
-      updateLightbox(currentIndex + 1);
+      showNext();
     }
   });
 }
