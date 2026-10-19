@@ -6,7 +6,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   initMobileNav();
   initBeforeAfterSlider();
-  initBeforeAfterTabs();
   initCarousel();
   initLightbox();
   initScrollSpy();
@@ -125,51 +124,7 @@ function initBeforeAfterSlider() {
 }
 
 /**
- * 3. Pestañas de Alternancia Antes y Después (Vano Motor vs Chapa)
- */
-function initBeforeAfterTabs() {
-  const tabs = document.querySelectorAll('.tab-btn[data-case]');
-  const slider = document.getElementById('beforeAfterSlider');
-  if (!tabs.length || !slider) return;
-
-  const imgBefore = slider.querySelector('.before-after-img-before img');
-  const imgAfter = slider.querySelector('.before-after-img-after img');
-
-  const casesData = {
-    motor: {
-      before: '/assets/cases/before-after/blazer-motor-antes.webp',
-      after: '/assets/cases/before-after/blazer-motor-despues.webp',
-      altBefore: 'Motor de Chevrolet Blazer con grasa y suciedad acumulada antes de la limpieza',
-      altAfter: 'Motor de Chevrolet Blazer restaurado y protegido con terminación mate después del detallado'
-    },
-    chapa: {
-      before: '/assets/cases/before-after/blazer-chapa-antes.webp',
-      after: '/assets/cases/before-after/blazer-chapa-despues.webp',
-      altBefore: 'Pintura negra de Chevrolet Blazer con marcas de lavado y barniz opaco antes de pulir',
-      altAfter: 'Pintura negra de Chevrolet Blazer con corrección en 3 pasos y brillo de espejo después de pulir'
-    }
-  };
-
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      tabs.forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-
-      const caseType = tab.getAttribute('data-case');
-      const data = casesData[caseType];
-
-      if (data && imgBefore && imgAfter) {
-        imgBefore.src = data.before;
-        imgBefore.alt = data.altBefore;
-        imgAfter.src = data.after;
-        imgAfter.alt = data.altAfter;
-      }
-    });
-  });
-}
-
-/**
- * 4. Carrusel Infinito con Autoplay y Control Táctil/Desktop
+ * 3. Carrusel Infinito con Autoplay y Control Táctil/Desktop
  * - 22 fotos de alta gama con loop infinito fluido (sin retrocesos bruscos en el scroll)
  * - Autoplay continuo cada 3 segundos (setInterval)
  * - Pausa temporal ante interacción manual (touch, pointer, scroll manual, wheel, flechas)
